@@ -55,7 +55,6 @@ linters:
     - unused
     - wastedassign
     - whitespace
-    - wrapcheck
     - wsl
 
 linters-settings:
@@ -88,17 +87,6 @@ linters-settings:
     require-specific: true
   revive:
     min-confidence: 0.80
-  wrapcheck:
-    ignoreSigs:
-      - .Errorf(
-      - errors.New(
-      - errors.Unwrap(
-      - .Wrap(
-      - .Wrapf(
-      - .WithMessage(
-      - .WithMessagef(
-      - .WithStack(
-      - Error(
 
 issues:
   exclude-rules:
@@ -106,4 +94,3 @@ issues:
       linters:
         - funlen
         - lll
-        - wrapcheck

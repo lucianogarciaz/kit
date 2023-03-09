@@ -4,9 +4,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/lucianogarciaz/kit/vo"
-
 	"github.com/stretchr/testify/require"
+
+	"github.com/lucianogarciaz/kit/vo"
 )
 
 func TestBoolPtr(t *testing.T) {
@@ -148,6 +148,7 @@ func TestInt32Interface(t *testing.T) {
 
 func TestInt64Ptr(t *testing.T) {
 	var in int64 = 123
+
 	require.IsType(t, &in, vo.Int64Ptr(in))
 	require.Equal(t, &in, vo.Int64Ptr(in))
 }
