@@ -76,6 +76,16 @@ func TestScan(t *testing.T) {
 	})
 }
 
+func TestValue(t *testing.T) {
+	require := require.New(t)
+
+	id := vo.NewID()
+	value, err := id.Value()
+
+	require.NoError(err)
+	require.Equal(id.String(), value)
+}
+
 func TestIsEmpty(t *testing.T) {
 	require := require.New(t)
 	t.Run(`Given a non empty id,
