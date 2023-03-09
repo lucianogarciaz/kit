@@ -7,8 +7,3 @@ lint-fix:
 
 test:
 	go test -race ./...
-
-tools-ci: tool-golangci-lint
-
-tool-golangci-lint:
-	scripts/goget.sh github.com/golangci/golangci-lint/cmd/golangci-lint
