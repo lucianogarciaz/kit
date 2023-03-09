@@ -2,7 +2,6 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/lucianogarciaz/kit)](https://goreportcard.com/report/github.com/lucianogarciaz/kit)
 
 Kit is a set of tools that can be used to enhance your service. 
-It is designed to be easy to install and use, with clear and concise documentation.
 
 ## Installation
 To start using latest version of Kit, just run:
