@@ -3,8 +3,9 @@ package vo_test
 import (
 	"testing"
 
-	"github.com/lucianogarciaz/kit/vo"
 	"github.com/stretchr/testify/require"
+
+	"github.com/lucianogarciaz/kit/vo"
 )
 
 func TestParseID(t *testing.T) {
@@ -20,6 +21,7 @@ func TestUnmarshalBinary(t *testing.T) {
 	id := vo.NewID()
 	marshaledID, err := id.MarshalBinary()
 	require.NoError(err)
+
 	var unmarshaledID vo.ID
 	err = unmarshaledID.UnmarshalBinary(marshaledID)
 	require.NoError(err)

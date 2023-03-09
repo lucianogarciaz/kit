@@ -1,15 +1,15 @@
 package vo
 
 import (
+	"database/sql/driver"
 	"fmt"
 
-	"database/sql/driver"
 	"github.com/google/uuid"
 )
 
 type ID uuid.UUID
 
-// NewID returns an ID with a UUID v4 value
+// NewID returns an ID with a UUID v4 value.
 func NewID() ID {
 	return ID(uuid.New())
 }
@@ -20,6 +20,7 @@ func ParseID(s string) (ID, error) {
 	if err != nil {
 		return ID{}, err
 	}
+
 	return ID(uuid), nil
 }
 
@@ -29,6 +30,7 @@ func MustParseID(s string) ID {
 	if err != nil {
 		panic(fmt.Sprintf("ID %s parse: %s", s, err.Error()))
 	}
+
 	return id
 }
 
@@ -37,7 +39,7 @@ func (id ID) String() string {
 	return uuid.UUID(id).String()
 }
 
-// IsEmpty is self-described
+// IsEmpty is self-described.
 func (id ID) IsEmpty() bool {
 	return id == ID{}
 }
@@ -50,11 +52,14 @@ func (id ID) Value() (driver.Value, error) {
 // Scan binds the value from the database with the type ID.
 func (id *ID) Scan(src interface{}) error {
 	var uuid uuid.UUID
+
 	err := (uuid).Scan(src)
 	if err != nil {
 		return err
 	}
+
 	*id = ID(uuid)
+
 	return nil
 }
 
@@ -66,10 +71,12 @@ func (id ID) MarshalBinary() ([]byte, error) {
 // UnmarshalBinary is self-described.
 func (id *ID) UnmarshalBinary(data []byte) error {
 	var uuid uuid.UUID
+
 	err := uuid.UnmarshalBinary(data)
 	if err == nil {
 		*id = ID(uuid)
 	}
+
 	return err
 }
 

@@ -15,16 +15,18 @@ func BoolValue(b *bool) (v bool) {
 	if b == nil {
 		return v
 	}
+
 	return *b
 }
 
-// BoolInterface returns a pointer of the interface value
+// BoolInterface returns a pointer of the interface value.
 func BoolInterface(i interface{}) *bool {
 	if reflect.ValueOf(i).Kind() == reflect.Ptr {
 		b, ok := i.(*bool)
 		if !ok {
 			return nil
 		}
+
 		return b
 	}
 
@@ -32,6 +34,7 @@ func BoolInterface(i interface{}) *bool {
 	if !ok {
 		return nil
 	}
+
 	return &b
 }
 
@@ -45,16 +48,18 @@ func StringValue(s *string) (v string) {
 	if s == nil {
 		return v
 	}
+
 	return *s
 }
 
-// StringInterface returns a pointer of the interface value
+// StringInterface returns a pointer of the interface value.
 func StringInterface(i interface{}) *string {
 	if reflect.ValueOf(i).Kind() == reflect.Ptr {
 		v, ok := i.(*string)
 		if !ok {
 			return nil
 		}
+
 		return v
 	}
 
@@ -62,6 +67,7 @@ func StringInterface(i interface{}) *string {
 	if !ok {
 		return nil
 	}
+
 	return &v
 }
 
@@ -79,13 +85,14 @@ func IntValue(i *int) (v int) {
 	return *i
 }
 
-// IntInterface returns a pointer of the interface value
+// IntInterface returns a pointer of the interface value.
 func IntInterface(i interface{}) *int {
 	if reflect.ValueOf(i).Kind() == reflect.Ptr {
 		v, ok := i.(*int)
 		if !ok {
 			return nil
 		}
+
 		return v
 	}
 
@@ -93,6 +100,7 @@ func IntInterface(i interface{}) *int {
 	if !ok {
 		return nil
 	}
+
 	return &v
 }
 
@@ -110,13 +118,14 @@ func Int32Value(i *int32) (v int32) {
 	return *i
 }
 
-// Int32Interface returns a pointer of the interface value
+// Int32Interface returns a pointer of the interface value.
 func Int32Interface(i interface{}) *int32 {
 	if reflect.ValueOf(i).Kind() == reflect.Ptr {
 		v, ok := i.(*int32)
 		if !ok {
 			return nil
 		}
+
 		return v
 	}
 
@@ -124,6 +133,7 @@ func Int32Interface(i interface{}) *int32 {
 	if !ok {
 		return nil
 	}
+
 	return &v
 }
 
@@ -141,13 +151,14 @@ func Int64Value(i *int64) (v int64) {
 	return *i
 }
 
-// Int64Interface returns a pointer of the interface value
+// Int64Interface returns a pointer of the interface value.
 func Int64Interface(i interface{}) *int64 {
 	if reflect.ValueOf(i).Kind() == reflect.Ptr {
 		v, ok := i.(*int64)
 		if !ok {
 			return nil
 		}
+
 		return v
 	}
 
@@ -155,6 +166,7 @@ func Int64Interface(i interface{}) *int64 {
 	if !ok {
 		return nil
 	}
+
 	return &v
 }
 
@@ -172,13 +184,14 @@ func Float32Value(f *float32) (v float32) {
 	return *f
 }
 
-// Float32Interface returns a pointer of the interface value
+// Float32Interface returns a pointer of the interface value.
 func Float32Interface(i interface{}) *float32 {
 	if reflect.ValueOf(i).Kind() == reflect.Ptr {
 		v, ok := i.(*float32)
 		if !ok {
 			return nil
 		}
+
 		return v
 	}
 
@@ -186,6 +199,7 @@ func Float32Interface(i interface{}) *float32 {
 	if !ok {
 		return nil
 	}
+
 	return &v
 }
 
@@ -203,13 +217,14 @@ func Float64Value(f *float64) (v float64) {
 	return *f
 }
 
-// Float64Interface returns a pointer of the interface value
+// Float64Interface returns a pointer of the interface value.
 func Float64Interface(i interface{}) *float64 {
 	if reflect.ValueOf(i).Kind() == reflect.Ptr {
 		v, ok := i.(*float64)
 		if !ok {
 			return nil
 		}
+
 		return v
 	}
 
@@ -217,6 +232,7 @@ func Float64Interface(i interface{}) *float64 {
 	if !ok {
 		return nil
 	}
+
 	return &v
 }
 
