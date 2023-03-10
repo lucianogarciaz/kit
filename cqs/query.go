@@ -36,6 +36,7 @@ type QueryHandlerMiddleware[Q Query, R QueryResult] func(h QueryHandler[Q, R]) Q
 func QueryHandlerMultiMiddleware[Q Query, R QueryResult](middlewares ...QueryHandlerMiddleware[Q, R]) QueryHandlerMiddleware[Q, R] {
 	return func(h QueryHandler[Q, R]) QueryHandler[Q, R] {
 		handler := h
+
 		for _, m := range middlewares {
 			handler = m(handler)
 		}

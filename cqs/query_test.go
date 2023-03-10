@@ -2,21 +2,26 @@ package cqs_test
 
 import (
 	"context"
-	"github.com/lucianogarciaz/kit/cqs"
-	"github.com/stretchr/testify/require"
 	"testing"
+
+	"github.com/stretchr/testify/require"
+
+	"github.com/lucianogarciaz/kit/cqs"
 )
 
 func TestQueryMultiMiddleware(t *testing.T) {
 	require := require.New(t)
 
 	var mwExecutionOrder []int
+
 	queryHandlerMw := func(count int) cqs.QueryHandlerMiddleware[cqs.Query, cqs.QueryResult] {
 		return func(h cqs.QueryHandler[cqs.Query, cqs.QueryResult]) cqs.QueryHandler[cqs.Query, cqs.QueryResult] {
 			return &QueryHandlerMock[cqs.Query, cqs.QueryResult]{
 				HandleFunc: func(ctx context.Context, query cqs.Query) (cqs.QueryResult, error) {
 					_, _ = h.Handle(ctx, query)
+
 					mwExecutionOrder = append(mwExecutionOrder, count)
+
 					return nil, nil
 				},
 			}
