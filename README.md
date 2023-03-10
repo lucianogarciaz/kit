@@ -1,5 +1,7 @@
 # Kit
 [![Go Report Card](https://goreportcard.com/badge/github.com/lucianogarciaz/kit)](https://goreportcard.com/report/github.com/lucianogarciaz/kit)
+![workflow](https://github.com/github/docs/actions/workflows/main.yml/badge.svg)
+
 
 Kit is a set of tools that can be used to enhance your service. 
 
