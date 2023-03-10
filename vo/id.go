@@ -1,13 +1,22 @@
 package vo
 
 import (
+	"database/sql"
 	"database/sql/driver"
+	"encoding"
 	"fmt"
 
 	"github.com/google/uuid"
 )
 
 type ID uuid.UUID
+
+var (
+	_ sql.Scanner                = &ID{}
+	_ driver.Valuer              = &ID{}
+	_ encoding.BinaryMarshaler   = &ID{}
+	_ encoding.BinaryUnmarshaler = &ID{}
+)
 
 // NewID returns an ID with a UUID v4 value.
 func NewID() ID {
