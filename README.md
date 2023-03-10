@@ -19,6 +19,10 @@ go get github.com/lucianogarciaz/kit
 Here are a few examples of how to use Kit:
 
 ### Id
+<details>
+
+<summary>usage examples</summary>
+
 ```go
 import (
     "github.com/lucianogarciaz/kit
@@ -30,8 +34,13 @@ func main() {
 }
 
 ```
+</details>
 
 ### Pointers
+<details>
+
+<summary>usage examples</summary>
+
 
 #### IntPtr
 ```go
@@ -251,6 +260,36 @@ func main() {
 	someOtherFunc(TimeValue(pointerFunc()))
 }
 ```
+</details>
+
+### DateTime
+<details>
+<summary>usage examples</summary>
+
+```go
+func main() {
+    dt := vo.DateTimeNow()
+    
+    dt.Format(time.RFC3339Nano)
+    
+    dt2 := vo.DateTimeNow()
+    
+    dt.Equal(dt2) //false
+    
+    dt.IsZero() //false
+    
+    err := dt.Scan(time.Now()) // err = false
+    
+    // implements marshalJSON
+    bt, err := dt.MarshalJSON() //err = false
+
+    var emptyDt vo.DateTime
+    err = emptyDt.UnmarshalJSON(bt) //err = false
+    emptyDt.Equal(dt) // true
+}
+```
+</details>
+
 
 ## Contributing
 I welcome contributions from the community! To contribute to Kit, follow these steps:

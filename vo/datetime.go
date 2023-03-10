@@ -87,8 +87,8 @@ func (dt DateTime) Equal(input DateTime) bool {
 	return time.Time(dt).Equal(time.Time(input))
 }
 
-// String returns a string representation of the calling DateTime.
-func (dt DateTime) String(layout string) string {
+// Format returns a string representation of the calling DateTime.
+func (dt DateTime) Format(layout string) string {
 	return time.Time(dt).Format(layout)
 }
 

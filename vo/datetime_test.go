@@ -126,10 +126,10 @@ func TestDateTimeFormat(t *testing.T) {
 	require.NoError(err)
 
 	t.Run(`Given a DateTime value,
-	when String is called with a standard layout string,
+	when Format is called with a standard layout string,
 	then it returns a string representation of that DateTime`, func(t *testing.T) {
 		layout := "2006-01-02T01:00:00Z"
-		require.Equal(vo.NewDateTime(testTime).String(layout), expectedTimeStr)
+		require.Equal(vo.NewDateTime(testTime).Format(layout), expectedTimeStr)
 	})
 }
 
