@@ -17,7 +17,108 @@ go get github.com/lucianogarciaz/kit
 
 ## Usage
 Here are a few examples of how to use Kit:
+## CQS
+<details>
+<summary> Summary </summary>
+Command-Query Separation (CQS) pattern is for handling command and queries in a software system. 
+In CQS, commands and queries are separated into two distinct types of operations, each with its own interface and handler. 
+While commands change the state of the system, queries retrieve data from the system without modifying it.
 
+This pattern provides several benefits, including better code organization, easier testing, and improved scalability. By separating queries from commands, developers can focus on each type of operation separately and optimize their implementations for their specific use cases.
+
+The cqs package provides a flexible way to handle queries by defining interfaces for queries, query handlers, 
+and query result types.
+
+Additionally, it provides a middleware function that allows developers to add additional
+functionality to the query/command handling pipeline, such as caching or logging, without modifying the underlying query handler.
+### Queries
+
+<details> 
+    <summary> explain more:</summary>
+
+```go
+
+var _ Query = &HelloQuery{}
+
+// Define the Query type.
+type HelloQuery struct {
+	Id string
+}
+
+func (h HelloQuery) QueryName() string {
+	return "hello_query"
+}
+
+var _ QueryHandler[HelloQuery, QueryResult] = &HelloQueryHandler{}
+
+// Define the QueryHandler type.
+type HelloQueryHandler struct {
+	someRepo SomeRepository
+}
+
+// Implement the Handle method for the QueryHandler type.
+func (h HelloQueryHandler) Handle(ctx context.Context, query HelloQuery) (QueryResult, error) {
+	hello, err := h.someRepo.GetById(ctx, query.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	return hello, nil
+}
+
+// implementation of a logger middlware
+func LoggerMiddleware[Q Query, R QueryResult](log Logger) QueryHandlerMiddleware[Q, R] {
+	return func(h QueryHandler[Q, R]) QueryHandler[Q, R] {
+		return queryHandlerFunc[Q, R](func(ctx context.Context, query Q) (R, error) {
+                        log.Info("you will see this message before the handle is called")
+			result, err := h.Handle(ctx, query)
+                        log.Info("you will see this message after the handle is called")
+			if err != nil {
+				log.Error(fmt.Errorf("something went wrong, %w", err))
+				return result, err
+			}
+
+			log.Info(fmt.Sprintf("query: %s was executed correctly", query.QueryName()))
+			return result, err
+		})
+	}
+}
+
+type Logger interface {
+	Info(string)
+	Error(error)
+}
+
+func qhMw[Q Query, R QueryResult](logger Logger) QueryHandlerMiddleware[Q, R] {
+	return QueryHandlerMultiMiddleware(
+    // Be careful ⚠️ the order of the mid. are important
+		LoggerMiddleware[Q, R](logger),
+	)
+}
+
+func main() {
+	handler := HelloQueryHandler{}
+	qh := qhMw[HelloQuery, QueryResult](JSONLogger{})(handler)
+
+	result, err := qh.Handle(context.Background(), HelloQuery{Id: "some-id"})
+	if err != nil {
+		// do something
+		return
+	}
+	// do something else
+	_ = result
+}
+
+``` 
+
+</details>
+
+Additionally, it provides a middleware function that allows developers to add additional 
+functionality to the query handling pipeline, such as caching or logging, without modifying the underlying query handler.
+
+</details>
+
+## Value objects
 ### Id
 <details>
 
