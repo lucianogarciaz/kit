@@ -500,7 +500,7 @@ I welcome contributions from the community! To contribute to Kit, follow these s
 
 
 ## Acknowledgements
-I would like to thank the following contributors, they are the soul of this library:
+I would like to thank also the people who have inspired me:
 * @gonzaloserrano: Gonzalo Serrano 
 * @xabi93: Xavi Martinez
 * @jmaeso: Joan Maeso
@@ -508,3 +508,4 @@ I would like to thank the following contributors, they are the soul of this libr
 * @jkmrto: Juan Carlos Martinez
 * @maitesin: Oscar Forner Martinez
 * @theskyinflames: Jaume Araús
+* Typeformers and specially subscriptions team 🧡
