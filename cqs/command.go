@@ -2,8 +2,6 @@ package cqs
 
 import (
 	"context"
-
-	"github.com/lucianogarciaz/kit/vo"
 )
 
 // Command is the interface for identifying commands by name.
@@ -38,22 +36,3 @@ func CommandHandlerMultiMiddleware[C Command](middlewares ...CommandHandlerMiddl
 		return CommandHandlerFunc[C](handler.Handle)
 	}
 }
-
-// An Event describes a change that has happened in the system.
-type Event interface {
-	EventID() vo.ID
-	EventName() EventVersion
-	EventAt() vo.DateTime
-	EventVersion() EventVersion
-	EventAggregateRootID() vo.ID
-	EventPayload() Payload
-}
-
-// EventName is self-described.
-type EventName string
-
-// EventVersion is self-described.
-type EventVersion int
-
-// Payload is self-described.
-type Payload interface{}
