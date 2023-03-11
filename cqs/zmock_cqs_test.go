@@ -80,3 +80,75 @@ func (mock *QueryHandlerMock[Q, R]) HandleCalls() []struct {
 	mock.lockHandle.RUnlock()
 	return calls
 }
+
+// Ensure, that CommandHandlerMock does implement cqs.CommandHandler.
+// If this is not the case, regenerate this file with moq.
+var _ cqs.CommandHandler[cqs.Command] = &CommandHandlerMock[cqs.Command]{}
+
+// CommandHandlerMock is a mock implementation of cqs.CommandHandler.
+//
+//	func TestSomethingThatUsesCommandHandler(t *testing.T) {
+//
+//		// make and configure a mocked cqs.CommandHandler
+//		mockedCommandHandler := &CommandHandlerMock{
+//			HandleFunc: func(ctx context.Context, cmd cqs.Command) ([]cqs.Event, error) {
+//				panic("mock out the Handle method")
+//			},
+//		}
+//
+//		// use mockedCommandHandler in code that requires cqs.CommandHandler
+//		// and then make assertions.
+//
+//	}
+type CommandHandlerMock[C cqs.Command] struct {
+	// HandleFunc mocks the Handle method.
+	HandleFunc func(ctx context.Context, cmd cqs.Command) ([]cqs.Event, error)
+
+	// calls tracks calls to the methods.
+	calls struct {
+		// Handle holds details about calls to the Handle method.
+		Handle []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Cmd is the cmd argument value.
+			Cmd cqs.Command
+		}
+	}
+	lockHandle sync.RWMutex
+}
+
+// Handle calls HandleFunc.
+func (mock *CommandHandlerMock[C]) Handle(ctx context.Context, cmd cqs.Command) ([]cqs.Event, error) {
+	if mock.HandleFunc == nil {
+		panic("CommandHandlerMock.HandleFunc: method is nil but CommandHandler.Handle was just called")
+	}
+	callInfo := struct {
+		Ctx context.Context
+		Cmd cqs.Command
+	}{
+		Ctx: ctx,
+		Cmd: cmd,
+	}
+	mock.lockHandle.Lock()
+	mock.calls.Handle = append(mock.calls.Handle, callInfo)
+	mock.lockHandle.Unlock()
+	return mock.HandleFunc(ctx, cmd)
+}
+
+// HandleCalls gets all the calls that were made to Handle.
+// Check the length with:
+//
+//	len(mockedCommandHandler.HandleCalls())
+func (mock *CommandHandlerMock[C]) HandleCalls() []struct {
+	Ctx context.Context
+	Cmd cqs.Command
+} {
+	var calls []struct {
+		Ctx context.Context
+		Cmd cqs.Command
+	}
+	mock.lockHandle.RLock()
+	calls = mock.calls.Handle
+	mock.lockHandle.RUnlock()
+	return calls
+}

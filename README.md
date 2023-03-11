@@ -34,6 +34,7 @@ and query result types.
 
 Additionally, it provides a middleware function that allows developers to add additional
 functionality to the query/command handling pipeline, such as caching or logging, without modifying the underlying query handler.
+
 ### Queries
 
 <details> 
@@ -116,8 +117,99 @@ func main() {
 
 </details>
 
-Additionally, it provides a middleware function that allows developers to add additional 
-functionality to the query handling pipeline, such as caching or logging, without modifying the underlying query handler.
+### Command Handlers
+
+<details>
+
+<summary> explain more:</summary>
+
+```go
+var _ Command = &HelloCommand{}
+
+// Define the Command type.
+type HelloCommand struct {
+	Id   vo.ID
+	Name string
+}
+
+func (h HelloCommand) CommandName() string {
+	return "hello_command"
+}
+
+var _ CommandHandler[HelloCommand] = &HelloCommandHandler{}
+
+type SomeRepository interface {
+	Save(ctx context.Context, id vo.ID, name string) error
+}
+
+// Define the CommandHandler type.
+type HelloCommandHandler struct {
+	someRepo SomeRepository
+}
+
+// Implement the Handle method for the CommandHandler type.
+func (h HelloCommandHandler) Handle(ctx context.Context, cmd HelloCommand) ([]Event, error) {
+	err := h.someRepo.Save(ctx, cmd.Id, cmd.Name)
+	if err != nil {
+		return nil, err
+	}
+
+	return nil, nil
+}
+
+// implementation of a logger middlware
+func LoggerMiddleware[C Command](log Logger) CommandHandlerMiddleware[C] {
+	return func(h CommandHandler[C]) CommandHandler[C] {
+		return CommandHandlerFunc[C](func(ctx context.Context, cmd C) ([]Event, error) {
+			log.Info("you will see this message before the handle is called")
+			events, err := h.Handle(ctx, cmd)
+			log.Info("you will see this message after the handle is called")
+			if err != nil {
+				log.Error(fmt.Errorf("something went wrong, %w", err))
+				return events, err
+			}
+
+			log.Info(fmt.Sprintf("command: %s was executed correctly", cmd.CommandName()))
+			return events, err
+		})
+	}
+}
+
+type Logger interface {
+	Info(string)
+	Error(error)
+}
+
+func chMw[C Command](logger Logger) CommandHandlerMiddleware[C] {
+	return CommandHandlerMultiMiddleware(
+		// Be careful ⚠️ the order of the mid. are important
+		OtherMiddlware[C](logger),
+		LoggerMiddleware[C](logger),
+	)
+}
+
+var _ Logger = &JSONLogger{}
+
+type JSONLogger struct{}
+
+func (J JSONLogger) Info(s string) {}
+func (J JSONLogger) Error(err error) {}
+
+func main() {
+	handler := HelloCommandHandler{}
+	ch := chMw[HelloCommand](JSONLogger{})(handler)
+
+	events, err := ch.Handle(context.Background(), HelloCommand{Id: vo.NewID(), Name: "some-name"})
+	if err != nil {
+		// do something
+		return
+	}
+	// do something else
+	_ = events
+}
+```
+
+</details>
 
 </details>
 

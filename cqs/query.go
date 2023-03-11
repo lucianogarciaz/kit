@@ -10,14 +10,6 @@ type Query interface {
 	QueryName() string
 }
 
-// QueryName is string to identify a given query when it has not input parameters.
-type QueryName string
-
-// QueryName implements Query interface.
-func (qn QueryName) QueryName() string {
-	return string(qn)
-}
-
 // QueryHandler is the interface for handling queries.
 type QueryHandler[Q Query, R QueryResult] interface {
 	Handle(ctx context.Context, query Q) (R, error)
