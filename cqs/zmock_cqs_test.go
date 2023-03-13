@@ -6,6 +6,7 @@ package cqs_test
 import (
 	"context"
 	"github.com/lucianogarciaz/kit/cqs"
+	"github.com/lucianogarciaz/kit/vo"
 	"sync"
 )
 
@@ -91,7 +92,7 @@ var _ cqs.CommandHandler[cqs.Command] = &CommandHandlerMock[cqs.Command]{}
 //
 //		// make and configure a mocked cqs.CommandHandler
 //		mockedCommandHandler := &CommandHandlerMock{
-//			HandleFunc: func(ctx context.Context, cmd cqs.Command) ([]cqs.Event, error) {
+//			HandleFunc: func(ctx context.Context, cmd C) ([]cqs.Event, error) {
 //				panic("mock out the Handle method")
 //			},
 //		}
@@ -102,7 +103,7 @@ var _ cqs.CommandHandler[cqs.Command] = &CommandHandlerMock[cqs.Command]{}
 //	}
 type CommandHandlerMock[C cqs.Command] struct {
 	// HandleFunc mocks the Handle method.
-	HandleFunc func(ctx context.Context, cmd cqs.Command) ([]cqs.Event, error)
+	HandleFunc func(ctx context.Context, cmd C) ([]cqs.Event, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -111,20 +112,20 @@ type CommandHandlerMock[C cqs.Command] struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
 			// Cmd is the cmd argument value.
-			Cmd cqs.Command
+			Cmd C
 		}
 	}
 	lockHandle sync.RWMutex
 }
 
 // Handle calls HandleFunc.
-func (mock *CommandHandlerMock[C]) Handle(ctx context.Context, cmd cqs.Command) ([]cqs.Event, error) {
+func (mock *CommandHandlerMock[C]) Handle(ctx context.Context, cmd C) ([]cqs.Event, error) {
 	if mock.HandleFunc == nil {
 		panic("CommandHandlerMock.HandleFunc: method is nil but CommandHandler.Handle was just called")
 	}
 	callInfo := struct {
 		Ctx context.Context
-		Cmd cqs.Command
+		Cmd C
 	}{
 		Ctx: ctx,
 		Cmd: cmd,
@@ -141,11 +142,349 @@ func (mock *CommandHandlerMock[C]) Handle(ctx context.Context, cmd cqs.Command) 
 //	len(mockedCommandHandler.HandleCalls())
 func (mock *CommandHandlerMock[C]) HandleCalls() []struct {
 	Ctx context.Context
-	Cmd cqs.Command
+	Cmd C
 } {
 	var calls []struct {
 		Ctx context.Context
-		Cmd cqs.Command
+		Cmd C
+	}
+	mock.lockHandle.RLock()
+	calls = mock.calls.Handle
+	mock.lockHandle.RUnlock()
+	return calls
+}
+
+// Ensure, that CommandMock does implement cqs.Command.
+// If this is not the case, regenerate this file with moq.
+var _ cqs.Command = &CommandMock{}
+
+// CommandMock is a mock implementation of cqs.Command.
+//
+//	func TestSomethingThatUsesCommand(t *testing.T) {
+//
+//		// make and configure a mocked cqs.Command
+//		mockedCommand := &CommandMock{
+//			CommandNameFunc: func() string {
+//				panic("mock out the CommandName method")
+//			},
+//		}
+//
+//		// use mockedCommand in code that requires cqs.Command
+//		// and then make assertions.
+//
+//	}
+type CommandMock struct {
+	// CommandNameFunc mocks the CommandName method.
+	CommandNameFunc func() string
+
+	// calls tracks calls to the methods.
+	calls struct {
+		// CommandName holds details about calls to the CommandName method.
+		CommandName []struct {
+		}
+	}
+	lockCommandName sync.RWMutex
+}
+
+// CommandName calls CommandNameFunc.
+func (mock *CommandMock) CommandName() string {
+	if mock.CommandNameFunc == nil {
+		panic("CommandMock.CommandNameFunc: method is nil but Command.CommandName was just called")
+	}
+	callInfo := struct {
+	}{}
+	mock.lockCommandName.Lock()
+	mock.calls.CommandName = append(mock.calls.CommandName, callInfo)
+	mock.lockCommandName.Unlock()
+	return mock.CommandNameFunc()
+}
+
+// CommandNameCalls gets all the calls that were made to CommandName.
+// Check the length with:
+//
+//	len(mockedCommand.CommandNameCalls())
+func (mock *CommandMock) CommandNameCalls() []struct {
+} {
+	var calls []struct {
+	}
+	mock.lockCommandName.RLock()
+	calls = mock.calls.CommandName
+	mock.lockCommandName.RUnlock()
+	return calls
+}
+
+// Ensure, that EventMock does implement cqs.Event.
+// If this is not the case, regenerate this file with moq.
+var _ cqs.Event = &EventMock{}
+
+// EventMock is a mock implementation of cqs.Event.
+//
+//	func TestSomethingThatUsesEvent(t *testing.T) {
+//
+//		// make and configure a mocked cqs.Event
+//		mockedEvent := &EventMock{
+//			EventAggregateRootIDFunc: func() vo.ID {
+//				panic("mock out the EventAggregateRootID method")
+//			},
+//			EventAtFunc: func() vo.DateTime {
+//				panic("mock out the EventAt method")
+//			},
+//			EventIDFunc: func() vo.ID {
+//				panic("mock out the EventID method")
+//			},
+//			EventNameFunc: func() cqs.EventName {
+//				panic("mock out the EventName method")
+//			},
+//			EventVersionFunc: func() cqs.EventVersion {
+//				panic("mock out the EventVersion method")
+//			},
+//		}
+//
+//		// use mockedEvent in code that requires cqs.Event
+//		// and then make assertions.
+//
+//	}
+type EventMock struct {
+	// EventAggregateRootIDFunc mocks the EventAggregateRootID method.
+	EventAggregateRootIDFunc func() vo.ID
+
+	// EventAtFunc mocks the EventAt method.
+	EventAtFunc func() vo.DateTime
+
+	// EventIDFunc mocks the EventID method.
+	EventIDFunc func() vo.ID
+
+	// EventNameFunc mocks the EventName method.
+	EventNameFunc func() cqs.EventName
+
+	// EventVersionFunc mocks the EventVersion method.
+	EventVersionFunc func() cqs.EventVersion
+
+	// calls tracks calls to the methods.
+	calls struct {
+		// EventAggregateRootID holds details about calls to the EventAggregateRootID method.
+		EventAggregateRootID []struct {
+		}
+		// EventAt holds details about calls to the EventAt method.
+		EventAt []struct {
+		}
+		// EventID holds details about calls to the EventID method.
+		EventID []struct {
+		}
+		// EventName holds details about calls to the EventName method.
+		EventName []struct {
+		}
+		// EventVersion holds details about calls to the EventVersion method.
+		EventVersion []struct {
+		}
+	}
+	lockEventAggregateRootID sync.RWMutex
+	lockEventAt              sync.RWMutex
+	lockEventID              sync.RWMutex
+	lockEventName            sync.RWMutex
+	lockEventVersion         sync.RWMutex
+}
+
+// EventAggregateRootID calls EventAggregateRootIDFunc.
+func (mock *EventMock) EventAggregateRootID() vo.ID {
+	if mock.EventAggregateRootIDFunc == nil {
+		panic("EventMock.EventAggregateRootIDFunc: method is nil but Event.EventAggregateRootID was just called")
+	}
+	callInfo := struct {
+	}{}
+	mock.lockEventAggregateRootID.Lock()
+	mock.calls.EventAggregateRootID = append(mock.calls.EventAggregateRootID, callInfo)
+	mock.lockEventAggregateRootID.Unlock()
+	return mock.EventAggregateRootIDFunc()
+}
+
+// EventAggregateRootIDCalls gets all the calls that were made to EventAggregateRootID.
+// Check the length with:
+//
+//	len(mockedEvent.EventAggregateRootIDCalls())
+func (mock *EventMock) EventAggregateRootIDCalls() []struct {
+} {
+	var calls []struct {
+	}
+	mock.lockEventAggregateRootID.RLock()
+	calls = mock.calls.EventAggregateRootID
+	mock.lockEventAggregateRootID.RUnlock()
+	return calls
+}
+
+// EventAt calls EventAtFunc.
+func (mock *EventMock) EventAt() vo.DateTime {
+	if mock.EventAtFunc == nil {
+		panic("EventMock.EventAtFunc: method is nil but Event.EventAt was just called")
+	}
+	callInfo := struct {
+	}{}
+	mock.lockEventAt.Lock()
+	mock.calls.EventAt = append(mock.calls.EventAt, callInfo)
+	mock.lockEventAt.Unlock()
+	return mock.EventAtFunc()
+}
+
+// EventAtCalls gets all the calls that were made to EventAt.
+// Check the length with:
+//
+//	len(mockedEvent.EventAtCalls())
+func (mock *EventMock) EventAtCalls() []struct {
+} {
+	var calls []struct {
+	}
+	mock.lockEventAt.RLock()
+	calls = mock.calls.EventAt
+	mock.lockEventAt.RUnlock()
+	return calls
+}
+
+// EventID calls EventIDFunc.
+func (mock *EventMock) EventID() vo.ID {
+	if mock.EventIDFunc == nil {
+		panic("EventMock.EventIDFunc: method is nil but Event.EventID was just called")
+	}
+	callInfo := struct {
+	}{}
+	mock.lockEventID.Lock()
+	mock.calls.EventID = append(mock.calls.EventID, callInfo)
+	mock.lockEventID.Unlock()
+	return mock.EventIDFunc()
+}
+
+// EventIDCalls gets all the calls that were made to EventID.
+// Check the length with:
+//
+//	len(mockedEvent.EventIDCalls())
+func (mock *EventMock) EventIDCalls() []struct {
+} {
+	var calls []struct {
+	}
+	mock.lockEventID.RLock()
+	calls = mock.calls.EventID
+	mock.lockEventID.RUnlock()
+	return calls
+}
+
+// EventName calls EventNameFunc.
+func (mock *EventMock) EventName() cqs.EventName {
+	if mock.EventNameFunc == nil {
+		panic("EventMock.EventNameFunc: method is nil but Event.EventName was just called")
+	}
+	callInfo := struct {
+	}{}
+	mock.lockEventName.Lock()
+	mock.calls.EventName = append(mock.calls.EventName, callInfo)
+	mock.lockEventName.Unlock()
+	return mock.EventNameFunc()
+}
+
+// EventNameCalls gets all the calls that were made to EventName.
+// Check the length with:
+//
+//	len(mockedEvent.EventNameCalls())
+func (mock *EventMock) EventNameCalls() []struct {
+} {
+	var calls []struct {
+	}
+	mock.lockEventName.RLock()
+	calls = mock.calls.EventName
+	mock.lockEventName.RUnlock()
+	return calls
+}
+
+// EventVersion calls EventVersionFunc.
+func (mock *EventMock) EventVersion() cqs.EventVersion {
+	if mock.EventVersionFunc == nil {
+		panic("EventMock.EventVersionFunc: method is nil but Event.EventVersion was just called")
+	}
+	callInfo := struct {
+	}{}
+	mock.lockEventVersion.Lock()
+	mock.calls.EventVersion = append(mock.calls.EventVersion, callInfo)
+	mock.lockEventVersion.Unlock()
+	return mock.EventVersionFunc()
+}
+
+// EventVersionCalls gets all the calls that were made to EventVersion.
+// Check the length with:
+//
+//	len(mockedEvent.EventVersionCalls())
+func (mock *EventMock) EventVersionCalls() []struct {
+} {
+	var calls []struct {
+	}
+	mock.lockEventVersion.RLock()
+	calls = mock.calls.EventVersion
+	mock.lockEventVersion.RUnlock()
+	return calls
+}
+
+// Ensure, that EventHandlerMock does implement cqs.EventHandler.
+// If this is not the case, regenerate this file with moq.
+var _ cqs.EventHandler = &EventHandlerMock{}
+
+// EventHandlerMock is a mock implementation of cqs.EventHandler.
+//
+//	func TestSomethingThatUsesEventHandler(t *testing.T) {
+//
+//		// make and configure a mocked cqs.EventHandler
+//		mockedEventHandler := &EventHandlerMock{
+//			HandleFunc: func(ctx context.Context, event cqs.Event) error {
+//				panic("mock out the Handle method")
+//			},
+//		}
+//
+//		// use mockedEventHandler in code that requires cqs.EventHandler
+//		// and then make assertions.
+//
+//	}
+type EventHandlerMock struct {
+	// HandleFunc mocks the Handle method.
+	HandleFunc func(ctx context.Context, event cqs.Event) error
+
+	// calls tracks calls to the methods.
+	calls struct {
+		// Handle holds details about calls to the Handle method.
+		Handle []struct {
+			// Ctx is the ctx argument value.
+			Ctx context.Context
+			// Event is the event argument value.
+			Event cqs.Event
+		}
+	}
+	lockHandle sync.RWMutex
+}
+
+// Handle calls HandleFunc.
+func (mock *EventHandlerMock) Handle(ctx context.Context, event cqs.Event) error {
+	if mock.HandleFunc == nil {
+		panic("EventHandlerMock.HandleFunc: method is nil but EventHandler.Handle was just called")
+	}
+	callInfo := struct {
+		Ctx   context.Context
+		Event cqs.Event
+	}{
+		Ctx:   ctx,
+		Event: event,
+	}
+	mock.lockHandle.Lock()
+	mock.calls.Handle = append(mock.calls.Handle, callInfo)
+	mock.lockHandle.Unlock()
+	return mock.HandleFunc(ctx, event)
+}
+
+// HandleCalls gets all the calls that were made to Handle.
+// Check the length with:
+//
+//	len(mockedEventHandler.HandleCalls())
+func (mock *EventHandlerMock) HandleCalls() []struct {
+	Ctx   context.Context
+	Event cqs.Event
+} {
+	var calls []struct {
+		Ctx   context.Context
+		Event cqs.Event
 	}
 	mock.lockHandle.RLock()
 	calls = mock.calls.Handle
