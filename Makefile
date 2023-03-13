@@ -14,5 +14,5 @@ tool-moq:
 mocks: ## Create mocks
 	go mod vendor
 	# cqs
-	moq -out cqs/zmock_cqs_test.go -pkg cqs_test cqs QueryHandler CommandHandler
+	moq -out cqs/zmock_cqs_test.go -pkg cqs_test cqs QueryHandler CommandHandler Command Event EventHandler
 	rm -rf ./vendor
