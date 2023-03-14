@@ -15,4 +15,5 @@ mocks: ## Create mocks
 	go mod vendor
 	# cqs
 	moq -out cqs/zmock_cqs_test.go -pkg cqs_test cqs QueryHandler CommandHandler Command Event EventHandler
+	moq -out obs/zmock_obs_test.go -pkg obs_test obs Marshaler
 	rm -rf ./vendor
