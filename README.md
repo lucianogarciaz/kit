@@ -30,11 +30,13 @@ The obs package provides a basic implementation of a logger, but you can also cr
 
 
 <details>
+
 	<summary>Explain more</summary>
+
 
 	```go
 	type Logger interface {
-	Log(level LogLevel, message string, payload ...PayloadEntry) error
+		Log(level LogLevel, message string, payload ...PayloadEntry) error
 	}
 	```
 	The Log() method takes a log level, a message string, and an optional list of payload entries.
