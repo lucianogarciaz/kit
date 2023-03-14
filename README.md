@@ -30,58 +30,57 @@ The obs package provides a basic implementation of a logger, but you can also cr
 
 
 <details>
-
-	<summary>Explain more</summary>
-
-
-	```go
-	type Logger interface {
-		Log(level LogLevel, message string, payload ...PayloadEntry) error
-	}
-	```
-	The Log() method takes a log level, a message string, and an optional list of payload entries.
-	You can define your own implementation of the Log() method to customize how log messages are processed and formatted.
-
-	### Creating a Basic Logger
-	To create a basic logger with default options, you can use the NewBasicLogger() function:
-
-	```go
-	logger := obs.NewBasicLogger()
-	```
-	The default logger writes log messages to os.Stdout using the json format.
-
-	#### Logging Messages
-	To log a message, you can use the Log() method of the logger.
-	The method takes a log level, a message string, and an optional list of payload entries.
-	The log level can be one of the predefined constants LevelDebug, LevelInfo, LevelWarn, or LevelError.
-	For example:
-	```go
-	logger.Log(obs.LevelInfo, "Hello, world!")
-	```
-
-	#### Customizing the Logger
-	You can customize the behavior of the logger by passing one or more options to the NewBasicLogger() function.
-	The available options are:
-
-	* *MarshalerOpt*: sets the Marshaler used to encode log messages. The default is jsonMarshaler.
-	* *WriterOpt*: sets the writer to which log messages are written. The default is os.Stdout.
-	For example, to create a logger that writes log messages to a file instead of os.Stdout, you can use the following code:
-
-	```go
-	file, err := os.OpenFile("app.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	logger := obs.NewBasicLogger(
-		obs.WriterOpt(file),
-	)
-	logger.Log(obs.LevelInfo, "some log")
-	```
+<summary>Explain more</summary>
 
 
-	#### Advanced Usage
-	The obs package provides a basic implementation of a logger, but you can also create your own custom logger by implementing the Logger interface.
+```go
+type Logger interface {
+	Log(level LogLevel, message string, payload ...PayloadEntry) error
+}
+```
+The Log() method takes a log level, a message string, and an optional list of payload entries.
+You can define your own implementation of the Log() method to customize how log messages are processed and formatted.
+
+### Creating a Basic Logger
+To create a basic logger with default options, you can use the NewBasicLogger() function:
+
+```go
+logger := obs.NewBasicLogger()
+```
+The default logger writes log messages to os.Stdout using the json format.
+
+#### Logging Messages
+To log a message, you can use the Log() method of the logger.
+The method takes a log level, a message string, and an optional list of payload entries.
+The log level can be one of the predefined constants LevelDebug, LevelInfo, LevelWarn, or LevelError.
+For example:
+```go
+logger.Log(obs.LevelInfo, "Hello, world!")
+```
+
+#### Customizing the Logger
+You can customize the behavior of the logger by passing one or more options to the NewBasicLogger() function.
+The available options are:
+
+* *MarshalerOpt*: sets the Marshaler used to encode log messages. The default is jsonMarshaler.
+* *WriterOpt*: sets the writer to which log messages are written. The default is os.Stdout.
+For example, to create a logger that writes log messages to a file instead of os.Stdout, you can use the following code:
+
+```go
+file, err := os.OpenFile("app.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+if err != nil {
+	log.Fatal(err)
+}
+
+logger := obs.NewBasicLogger(
+	obs.WriterOpt(file),
+)
+logger.Log(obs.LevelInfo, "some log")
+```
+
+
+#### Advanced Usage
+The obs package provides a basic implementation of a logger, but you can also create your own custom logger by implementing the Logger interface.
 
 </details>
 
