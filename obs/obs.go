@@ -47,7 +47,10 @@ func CommandHandlerObsMiddleware[C cqs.Command](obs Observer) cqs.CommandHandler
 		return cqs.CommandHandlerFunc[C](func(ctx context.Context, cmd C) ([]cqs.Event, error) {
 			defer func(begin time.Time) {
 				elapsed := time.Since(begin)
-				_ = obs.Log(LevelInfo, "command: %s with latency: %d", cmd.CommandName(), elapsed.Seconds())
+				_ = obs.Log(LevelInfo, fmt.Sprintf("command: %s with latency: %f",
+					cmd.CommandName(),
+					elapsed.Seconds(),
+				))
 			}(time.Now())
 
 			events, err := h.Handle(ctx, cmd)
