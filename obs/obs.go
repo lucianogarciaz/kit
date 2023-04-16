@@ -1,6 +1,12 @@
 package obs
 
-import "context"
+import (
+	"context"
+	"fmt"
+	"time"
+
+	"github.com/lucianogarciaz/kit/cqs"
+)
 
 // Observer provides Metrics and Logger features.
 type Observer interface {
@@ -35,3 +41,21 @@ type Tag struct {
 
 // PayloadEntry is a log entry payload.
 type PayloadEntry interface{}
+
+func CommandHandlerObsMiddleware[C cqs.Command](obs Observer) cqs.CommandHandlerMiddleware[C] {
+	return func(h cqs.CommandHandler[C]) cqs.CommandHandler[C] {
+		return cqs.CommandHandlerFunc[C](func(ctx context.Context, cmd C) ([]cqs.Event, error) {
+			defer func(begin time.Time) {
+				elapsed := time.Since(begin)
+				_ = obs.Log(LevelInfo, "command: %s with latency: %d", cmd.CommandName(), elapsed.Seconds())
+			}(time.Now())
+
+			events, err := h.Handle(ctx, cmd)
+			if err != nil {
+				_ = obs.Log(LevelError, fmt.Sprintf("command: %s with error: %s", cmd.CommandName(), err.Error()))
+			}
+
+			return events, err
+		})
+	}
+}
