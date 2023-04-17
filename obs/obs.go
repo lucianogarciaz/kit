@@ -59,3 +59,24 @@ func CommandHandlerObsMiddleware[C cqs.Command](obs Observer) cqs.CommandHandler
 		})
 	}
 }
+
+// QueryHandlerObsMiddleware is a middleware function to make query handlers observables.
+func QueryHandlerObsMiddleware[Q cqs.Query, R cqs.QueryResult](obs Observer) cqs.QueryHandlerMiddleware[Q, R] {
+	return func(h cqs.QueryHandler[Q, R]) cqs.QueryHandler[Q, R] {
+		return cqs.QueryHandlerFunc[Q, R](func(ctx context.Context, query Q) (R, error) {
+			defer func(begin time.Time) {
+				elapsed := time.Since(begin)
+				_ = obs.Log(LevelInfo, fmt.Sprintf("query: %s, latency: %f",
+					query.QueryName(),
+					elapsed.Seconds()),
+				)
+			}(time.Now())
+			result, err := h.Handle(ctx, query)
+			if err != nil {
+				_ = obs.Log(LevelError, fmt.Sprintf("query: %s, error: %s", query.QueryName(), err.Error()))
+			}
+
+			return result, err
+		})
+	}
+}

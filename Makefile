@@ -16,5 +16,5 @@ mocks: ## Create mocks
 	# cqs
 	moq -out cqs/zmock_cqs_test.go -pkg cqs_test cqs QueryHandler CommandHandler Command Event EventHandler
 	moq -out obs/zmock_obs_test.go -pkg obs_test obs Marshaler Observer
-	moq -out obs/zmock_cqs_test.go -pkg obs_test cqs Command CommandHandler
+	moq -out obs/zmock_cqs_test.go -pkg obs_test cqs Command CommandHandler Query QueryHandler
 	rm -rf ./vendor

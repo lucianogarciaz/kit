@@ -15,9 +15,9 @@ type QueryHandler[Q Query, R QueryResult] interface {
 	Handle(ctx context.Context, query Q) (R, error)
 }
 
-type queryHandlerFunc[Q Query, R QueryResult] func(ctx context.Context, query Q) (R, error)
+type QueryHandlerFunc[Q Query, R QueryResult] func(ctx context.Context, query Q) (R, error)
 
-func (f queryHandlerFunc[Q, R]) Handle(ctx context.Context, query Q) (R, error) {
+func (f QueryHandlerFunc[Q, R]) Handle(ctx context.Context, query Q) (R, error) {
 	return f(ctx, query)
 }
 
@@ -33,6 +33,6 @@ func QueryHandlerMultiMiddleware[Q Query, R QueryResult](middlewares ...QueryHan
 			handler = m(handler)
 		}
 
-		return queryHandlerFunc[Q, R](handler.Handle)
+		return QueryHandlerFunc[Q, R](handler.Handle)
 	}
 }
