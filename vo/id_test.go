@@ -10,10 +10,18 @@ import (
 
 func TestParseID(t *testing.T) {
 	require := require.New(t)
-	id := vo.NewID()
-	parsedID, err := vo.ParseID(id.String())
-	require.NoError(err)
-	require.IsType(vo.ID{}, parsedID)
+	t.Run(`valid id`, func(t *testing.T) {
+		id := vo.NewID()
+		parsedID, err := vo.ParseID(id.String())
+		require.NoError(err)
+		require.IsType(vo.ID{}, parsedID)
+	})
+
+	t.Run(`invalid id`, func(t *testing.T) {
+		id := "invalid"
+		_, err := vo.ParseID(id)
+		require.ErrorIs(err, vo.ErrInvalidID)
+	})
 }
 
 func TestUnmarshalBinary(t *testing.T) {

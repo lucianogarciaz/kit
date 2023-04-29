@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"database/sql/driver"
 	"encoding"
+	"errors"
 	"fmt"
 
 	"github.com/google/uuid"
@@ -23,11 +24,13 @@ func NewID() ID {
 	return ID(uuid.New())
 }
 
+var ErrInvalidID = errors.New("invalid id")
+
 // ParseID is self-described.
 func ParseID(s string) (ID, error) {
 	uuid, err := uuid.Parse(s)
 	if err != nil {
-		return ID{}, err
+		return ID{}, ErrInvalidID
 	}
 
 	return ID(uuid), nil
